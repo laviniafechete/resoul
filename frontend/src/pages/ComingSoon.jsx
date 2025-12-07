@@ -36,16 +36,15 @@ export default function ComingSoon() {
         <div
           style={{
             position: "absolute",
-            top: "18px",
-            left: "28px",
-            fontSize: "3vw",
+            top: "12px",
+            left: "16px",
+            fontSize: "clamp(10px, 2.6vw, 20px)",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             opacity: 0.75,
+            whiteSpace: "nowrap",
           }}
-        >
-          RESOUL • HEALING SPACE
-        </div>
+        ></div>
 
         <div
           style={{
@@ -58,20 +57,18 @@ export default function ComingSoon() {
         >
           <div
             style={{
-              fontSize: "3.2vw",
+              fontSize: "clamp(12px, 3.2vw, 32px)",
               letterSpacing: "0.25em",
               textTransform: "uppercase",
               opacity: 0.7,
-              marginBottom: "18px",
+              marginBottom: "12px",
             }}
-          >
-            CURÂND ONLINE
-          </div>
+          ></div>
 
           <div
             style={{
-              fontSize: "6vw",
-              letterSpacing: "0.24em",
+              fontSize: "clamp(18px, 6vw, 48px)",
+              letterSpacing: "0.20em",
               textTransform: "uppercase",
               marginBottom: "6px",
             }}
@@ -81,10 +78,11 @@ export default function ComingSoon() {
 
           <div
             style={{
-              fontSize: "7.5vw",
+              fontSize: "clamp(24px, 8vw, 64px)",
               fontWeight: 600,
-              letterSpacing: "0.35em",
+              letterSpacing: "0.28em",
               textTransform: "uppercase",
+              marginBottom: "10px",
             }}
           >
             MAGIA
@@ -92,9 +90,9 @@ export default function ComingSoon() {
 
           <div
             style={{
-              fontSize: "0.9rem",
+              fontSize: "clamp(12px, 1.8vw, 16px)",
               marginTop: "26px",
-              maxWidth: "380px",
+              maxWidth: "500px",
               marginInline: "auto",
               lineHeight: 1.5,
               opacity: 0.8,
@@ -109,15 +107,16 @@ export default function ComingSoon() {
         <div
           style={{
             position: "absolute",
-            bottom: "18px",
-            right: "28px",
-            fontSize: "3vw",
+            bottom: "12px",
+            right: "16px",
+            fontSize: "clamp(10px, 2.6vw, 20px)",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
-            opacity: 0.6,
+            opacity: 0.55,
+            whiteSpace: "nowrap",
           }}
         >
-          COMING SOON • RESOUL.RO
+          CURÂND ONLINE
         </div>
       </div>
     </div>

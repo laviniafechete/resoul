@@ -17,9 +17,10 @@ export default function ComingSoon() {
     >
       <div
         style={{
-          width: "90%",
+          width: "100%",
           maxWidth: "880px",
-          aspectRatio: "16 / 9",
+          padding: "40px 20px",
+          height: "auto",
           background: "#050509",
           borderRadius: "18px",
           border: "1px solid rgba(255, 255, 255, 0.14)",
@@ -37,7 +38,7 @@ export default function ComingSoon() {
             position: "absolute",
             top: "18px",
             left: "28px",
-            fontSize: "0.75rem",
+            fontSize: "3vw",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             opacity: 0.75,
@@ -48,28 +49,16 @@ export default function ComingSoon() {
 
         <div
           style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: "46%",
-            height: "1px",
-            background: "rgba(255, 255, 255, 0.18)",
-            transform: "translate(-50%, -145%)",
-          }}
-        />
-
-        <div
-          style={{
             position: "relative",
             zIndex: 1,
             textAlign: "center",
             width: "100%",
-            padding: "0 40px",
+            padding: "0 20px",
           }}
         >
           <div
             style={{
-              fontSize: "0.8rem",
+              fontSize: "3.2vw",
               letterSpacing: "0.25em",
               textTransform: "uppercase",
               opacity: 0.7,
@@ -81,7 +70,7 @@ export default function ComingSoon() {
 
           <div
             style={{
-              fontSize: "2.4rem",
+              fontSize: "6vw",
               letterSpacing: "0.24em",
               textTransform: "uppercase",
               marginBottom: "6px",
@@ -92,7 +81,7 @@ export default function ComingSoon() {
 
           <div
             style={{
-              fontSize: "2.9rem",
+              fontSize: "7.5vw",
               fontWeight: 600,
               letterSpacing: "0.35em",
               textTransform: "uppercase",
@@ -122,7 +111,7 @@ export default function ComingSoon() {
             position: "absolute",
             bottom: "18px",
             right: "28px",
-            fontSize: "0.75rem",
+            fontSize: "3vw",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             opacity: 0.6,

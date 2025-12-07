@@ -1,5 +1,5 @@
 import React from 'react'
-import Instructor from '../../../assets/Images/teacher3.png'
+import Instructor from '../../../assets/Images/mentor.png'
 import HighlightText from './HighlightText'
 import CTAButton from "../HomePage/Button"
 import { FaArrowRight } from 'react-icons/fa'
@@ -30,18 +30,17 @@ const InstructorSection = () => {
 
         <div className='lg:w-[50%] flex flex-col'>
           <div className='text-3xl lg:text-4xl font-semobold w-[50%] mb-2'>
-            Become an
-            <HighlightText text={"Instructor"} />
+            Devino mentor
           </div>
 
           <p className='font-medium text-[16px] w-[80%] text-richblack-300 mb-12'>
-            Instructors from around the world teach millions of students on StudyNotion. We provide the tools and skills to teach what you love.
-          </p>
+          Inspiră, ghidează și ajută alți oameni să își regăsească liniștea și direcția.
+          Prin platforma noastră, poți transforma pasiunea ta pentru dezvoltare personală și mindfulness într-un impact real în viețile celorlalți.          </p>
 
           <div className='w-fit'>
             <CTAButton active={true} linkto={"/signup"}>
               <div className='flex flex-row gap-2 items-center'>
-                Start Learning Today
+              Începe ca mentor
                 <FaArrowRight />
               </div>
             </CTAButton>

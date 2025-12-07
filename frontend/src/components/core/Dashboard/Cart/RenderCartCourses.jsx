@@ -1,23 +1,23 @@
-import { FaStar } from "react-icons/fa"
-import { RiDeleteBin6Line } from "react-icons/ri"
-import ReactStars from "react-rating-stars-component"
-import { useDispatch, useSelector } from "react-redux"
+import { FaStar } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import ReactStars from "react-rating-stars-component";
+import { useDispatch, useSelector } from "react-redux";
 
-import { removeFromCart } from "../../../../slices/cartSlice"
-import Img from './../../../common/Img';
+import { removeFromCart } from "../../../../slices/cartSlice";
+import Img from "./../../../common/Img";
 
 export default function RenderCartCourses() {
-  const { cart } = useSelector((state) => state.cart)
-  const dispatch = useDispatch()
-
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
   return (
     <div className="flex flex-1 flex-col">
       {cart.map((course, indx) => (
         <div
           key={course._id}
-          className={`flex w-full flex-wrap items-start justify-between gap-6 ${indx !== cart.length - 1 && "border-b border-b-richblack-400 pb-6"
-            } ${indx !== 0 && "mt-6"} `}
+          className={`flex w-full flex-wrap items-start justify-between gap-6 ${
+            indx !== cart.length - 1 && "border-b border-b-richblack-400 pb-6"
+          } ${indx !== 0 && "mt-6"} `}
         >
           <div className="flex flex-1 flex-col gap-4 xl:flex-row">
             {/* course thumbnail */}
@@ -28,14 +28,14 @@ export default function RenderCartCourses() {
             />
 
             <div className="flex flex-col space-y-1">
-              <p className="text-lg font-medium text-richblack-5">
+              <p className="text-lg font-medium text-richblack-300">
                 {course?.courseName}
               </p>
               <p className="text-sm text-richblack-300">
                 {course?.category?.name}
               </p>
               <div className="flex items-center gap-2">
-                <span className="text-yellow-5">4.5</span>
+                <span className="text-brand-primary">5.0</span>
                 <ReactStars
                   count={5}
                   value={course?.ratingAndReviews?.length}
@@ -58,14 +58,30 @@ export default function RenderCartCourses() {
               className="flex items-center gap-x-1 rounded-md border border-richblack-600 bg-richblack-700 py-3 px-[12px] text-pink-200"
             >
               <RiDeleteBin6Line />
-              <span>Remove</span>
+              <span>Sterge din cos</span>
             </button>
+            {course?.pricing?.benefit === "HalfPrice" && (
+              <span className="rounded-full bg-brand-primary/15 px-3 py-1 text-xs font-semibold text-brand-primary">
+                -50% {course?.pricing?.plan === "Subscriber" ? "pentru abonați" : ""}
+              </span>
+            )}
             <p className="mb-6 text-3xl font-medium text-yellow-100">
-              ₹ {course?.price}
+              {course?.pricing?.isFree ? (
+                <span className="text-caribbeangreen-200">Gratuit</span>
+              ) : (
+                <>
+                  {course?.pricing?.isDiscounted && (
+                    <span className="mr-2 text-base text-richblack-400 line-through">
+                      Ron {course?.pricing?.originalPrice}
+                    </span>
+                  )}
+                  Ron {course?.pricing?.displayPrice ?? course?.price}
+                </>
+              )}
             </p>
           </div>
         </div>
       ))}
     </div>
-  )
+  );
 }

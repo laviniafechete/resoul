@@ -84,6 +84,14 @@ exports.signup = async (req, res) => {
             });
         }
 
+        const allowedAccountTypes = ["Student", "Instructor"];
+        if (!allowedAccountTypes.includes(accountType)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Account type is not allowed for self-service signup'
+            });
+        }
+
         // check both pass matches or not
         if (password !== confirmPassword) {
             return res.status(400).json({
@@ -136,13 +144,14 @@ exports.signup = async (req, res) => {
             gender: null, dateOfBirth: null, about: null, contactNumber: null
         });
 
-        let approved = "";
-        approved === "Instructor" ? (approved = false) : (approved = true);
+        const approved = accountType === "Instructor" ? false : true;
 
         // create entry in DB
         const userData = await User.create({
             firstName, lastName, email, password: hashedPassword, contactNumber,
             accountType: accountType, additionalDetails: profileDetails._id,
+            subscriptionPlan: "Default",
+            subscriptionStatus: "Inactive",
             approved: approved,
             image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
         });
@@ -195,7 +204,8 @@ exports.login = async (req, res) => {
             const payload = {
                 email: user.email,
                 id: user._id,
-                accountType: user.accountType // This will help to check whether user have access to route, while authorzation
+                accountType: user.accountType, // This will help to check whether user have access to route, while authorzation
+                subscriptionPlan: user.subscriptionPlan || "Default"
             };
 
             // Generate token 
@@ -216,7 +226,12 @@ exports.login = async (req, res) => {
 
             res.cookie('token', token, cookieOptions).status(200).json({
                 success: true,
-                user,
+                user: {
+                    ...user,
+                    subscriptionPlan: user.subscriptionPlan || 'Default',
+                    subscriptionStatus: user.subscriptionStatus || 'Inactive',
+                    subscriptionActiveUntil: user.subscriptionActiveUntil || null
+                },
                 token,
                 message: 'User logged in successfully'
             });

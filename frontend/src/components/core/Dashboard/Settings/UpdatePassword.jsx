@@ -1,53 +1,53 @@
-import React, { useState } from "react"
-import { useForm } from "react-hook-form"
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
-import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import { changePassword } from "../../../../services/operations/SettingsAPI"
-import IconBtn from "../../../common/IconBtn"
+import { changePassword } from "../../../../services/operations/SettingsAPI";
+import IconBtn from "../../../common/IconBtn";
 
 export default function UpdatePassword() {
-  const { token } = useSelector((state) => state.auth)
-  const navigate = useNavigate()
+  const { token } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
-  const [showOldPassword, setShowOldPassword] = useState(false)
-  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
   const submitPasswordForm = async (data) => {
-    console.log("password Data - ", data)
+    console.log("password Data - ", data);
     try {
-      await changePassword(token, data)
+      await changePassword(token, data);
     } catch (error) {
-      console.log("ERROR MESSAGE - ", error.message)
+      console.log("ERROR MESSAGE - ", error.message);
     }
-  }
+  };
 
   return (
     <>
       <form onSubmit={handleSubmit(submitPasswordForm)}>
-        <div className="my-10 flex flex-col gap-y-6 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-8 px-6 sm:px-12">
-          <h2 className="text-lg font-semibold text-richblack-5">Password</h2>
+        <div className="my-10 flex flex-col gap-y-6 rounded-md border-[1px] border-brand-primary p-8 px-6 sm:px-12">
+          <h2 className="text-lg font-semibold text-richblack-300">Parola</h2>
 
           <div className="flex flex-col gap-5 lg:flex-row">
-          {/* Current Password */}
+            {/* Current Password */}
             <div className="relative flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="oldPassword" className="lable-style">
-                Current Password
+                Parola curentă
               </label>
 
               <input
                 type={showOldPassword ? "text" : "password"}
                 name="oldPassword"
                 id="oldPassword"
-                placeholder="Enter Current Password"
+                placeholder="Parola curentă"
                 className="form-style"
                 {...register("oldPassword", { required: true })}
               />
@@ -57,15 +57,15 @@ export default function UpdatePassword() {
                 className="absolute right-3 top-[38px] z-[10] cursor-pointer"
               >
                 {showOldPassword ? (
-                  <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
-                ) : (
                   <AiOutlineEye fontSize={24} fill="#AFB2BF" />
+                ) : (
+                  <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
                 )}
               </span>
 
               {errors.oldPassword && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
-                  Please enter your Current Password.
+                  Introduceți parola curentă
                 </span>
               )}
             </div>
@@ -73,14 +73,14 @@ export default function UpdatePassword() {
             {/* new password */}
             <div className="relative flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="newPassword" className="lable-style">
-                New Password
+                Parola nouă
               </label>
 
               <input
                 type={showNewPassword ? "text" : "password"}
                 name="newPassword"
                 id="newPassword"
-                placeholder="Enter New Password"
+                placeholder="Parola nouă"
                 className="form-style"
                 {...register("newPassword", { required: true })}
               />
@@ -97,7 +97,7 @@ export default function UpdatePassword() {
               </span>
               {errors.newPassword && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
-                  Please enter your New Password.
+                  Introduceți parola nouă
                 </span>
               )}
             </div>
@@ -105,14 +105,14 @@ export default function UpdatePassword() {
             {/*confirm new password */}
             <div className="relative flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="confirmNewPassword" className="lable-style">
-                Confirm New Password
+                Confirmă parola nouă
               </label>
 
               <input
                 type={showConfirmNewPassword ? "text" : "password"}
                 name="confirmNewPassword"
                 id="confirmNewPassword"
-                placeholder="Enter Confirm New Password"
+                placeholder="Confirmă parola nouă"
                 className="form-style"
                 {...register("confirmNewPassword", { required: true })}
               />
@@ -129,25 +129,25 @@ export default function UpdatePassword() {
               </span>
               {errors.confirmNewPassword && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
-                  Please enter your Confirm New Password.
+                  Introduceți confirmarea parolei noi
                 </span>
               )}
             </div>
-
           </div>
         </div>
 
         <div className="flex justify-end gap-2">
           <button
-            onClick={() => { navigate("/dashboard/my-profile") }}
+            onClick={() => {
+              navigate("/dashboard/my-profile");
+            }}
             className="cursor-pointer rounded-md bg-richblack-700 py-2 px-5 font-semibold text-richblack-50"
           >
-            Cancel
+            Anulează
           </button>
-          <IconBtn type="submit" text="Update" />
+          <IconBtn type="submit" text="Actualizează" />
         </div>
-
       </form>
     </>
-  )
+  );
 }

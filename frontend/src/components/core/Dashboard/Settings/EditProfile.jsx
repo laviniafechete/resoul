@@ -1,74 +1,78 @@
-import { useForm } from "react-hook-form"
-import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import { updateProfile } from "../../../../services/operations/SettingsAPI"
-import IconBtn from "../../../common/IconBtn"
+import { updateProfile } from "../../../../services/operations/SettingsAPI";
+import IconBtn from "../../../common/IconBtn";
 
-const genders = ["Male", "Female", "Non-Binary", "Prefer not to say", "Other"]
+const genders = ["Femeie", "Barbat", "Altul", "Prefer sa nu spun"];
 
 export default function EditProfile() {
-  const { user } = useSelector((state) => state.profile)
-  const { token } = useSelector((state) => state.auth)
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.profile);
+  const { token } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const submitProfileForm = async (data) => {
     // console.log("Form Data - ", data)
     try {
-      dispatch(updateProfile(token, data))
+      dispatch(updateProfile(token, data));
     } catch (error) {
-      console.log("ERROR MESSAGE - ", error.message)
+      console.log("ERROR MESSAGE - ", error.message);
     }
-  }
+  };
   return (
     <>
       <form onSubmit={handleSubmit(submitProfileForm)}>
         {/* Profile Information */}
-        <div className="my-10 flex flex-col gap-y-6 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-8 px-6 sm:px-12">
-          <h2 className="text-lg font-semibold text-richblack-5">
-            Profile Information
+        <div className="my-10 flex flex-col gap-y-6 rounded-md border-[1px] border-brand-primary p-8 px-6 sm:px-12">
+          <h2 className="text-lg font-semibold text-richblack-300">
+            Informatii de profil
           </h2>
 
           <div className="flex flex-col gap-5 lg:flex-row">
             <div className="flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="firstName" className="lable-style">
-                First Name
+                Prenume
               </label>
               <input
                 type="text"
                 name="firstName"
                 id="firstName"
-                placeholder="Enter first name"
+                placeholder="Introduceți prenumele"
                 className="form-style"
                 {...register("firstName", { required: true })}
                 defaultValue={user?.firstName}
               />
               {errors.firstName && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
-                  Please enter your first name.
+                  Introduceți prenumele
                 </span>
               )}
             </div>
 
             <div className="flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="lastName" className="lable-style">
-                Last Name
+                Nume
               </label>
               <input
                 type="text"
                 name="lastName"
                 id="lastName"
-                placeholder="Enter first name"
+                placeholder="Introduceți numele"
                 className="form-style"
                 {...register("lastName", { required: true })}
                 defaultValue={user?.lastName}
               />
               {errors.lastName && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
-                  Please enter your last name.
+                  Introduceți numele
                 </span>
               )}
             </div>
@@ -77,7 +81,7 @@ export default function EditProfile() {
           <div className="flex flex-col gap-5 lg:flex-row">
             <div className="flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="dateOfBirth" className="lable-style">
-                Date of Birth
+                Data de nastere
               </label>
               <input
                 type="date"
@@ -87,11 +91,11 @@ export default function EditProfile() {
                 {...register("dateOfBirth", {
                   required: {
                     value: true,
-                    message: "Please enter your Date of Birth.",
+                    message: "Introduceți data de nastere.",
                   },
                   max: {
                     value: new Date().toISOString().split("T")[0],
-                    message: "Date of Birth cannot be in the future.",
+                    message: "Data de nastere nu poate fi in viitor.",
                   },
                 })}
                 defaultValue={user?.additionalDetails?.dateOfBirth}
@@ -105,7 +109,7 @@ export default function EditProfile() {
 
             <div className="flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="gender" className="lable-style">
-                Gender
+                Gen
               </label>
               <select
                 type="text"
@@ -120,12 +124,12 @@ export default function EditProfile() {
                     <option key={i} value={ele}>
                       {ele}
                     </option>
-                  )
+                  );
                 })}
               </select>
               {errors.gender && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
-                  Please enter your Date of Birth.
+                  Introduceți data de nastere.
                 </span>
               )}
             </div>
@@ -134,21 +138,21 @@ export default function EditProfile() {
           <div className="flex flex-col gap-5 lg:flex-row">
             <div className="flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="contactNumber" className="lable-style">
-                Contact Number
+                Numar de telefon
               </label>
               <input
                 type="tel"
                 name="contactNumber"
                 id="contactNumber"
-                placeholder="Enter Contact Number"
+                placeholder="Introduceți numarul de telefon"
                 className="form-style"
                 {...register("contactNumber", {
                   required: {
                     value: true,
-                    message: "Please enter your Contact Number.",
+                    message: "Introduceți numarul de telefon.",
                   },
-                  maxLength: { value: 12, message: "Invalid Contact Number" },
-                  minLength: { value: 10, message: "Invalid Contact Number" },
+                  maxLength: { value: 12, message: "Numar de telefon invalid" },
+                  minLength: { value: 10, message: "Numar de telefon invalid" },
                 })}
                 defaultValue={user?.additionalDetails?.contactNumber}
               />
@@ -161,20 +165,20 @@ export default function EditProfile() {
 
             <div className="flex flex-col gap-2 lg:w-[48%]">
               <label htmlFor="about" className="lable-style">
-                About
+                Despre
               </label>
               <input
                 type="text"
                 name="about"
                 id="about"
-                placeholder="Enter Bio Details"
+                placeholder="Introduceți detaliile despre tine"
                 className="form-style"
                 {...register("about", { required: true })}
                 defaultValue={user?.additionalDetails?.about}
               />
               {errors.about && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
-                  Please enter your About.
+                  Introduceți detaliile despre tine.
                 </span>
               )}
             </div>
@@ -183,15 +187,16 @@ export default function EditProfile() {
 
         <div className="flex justify-end gap-2">
           <button
-            onClick={() => { navigate("/dashboard/my-profile") }}
+            onClick={() => {
+              navigate("/dashboard/my-profile");
+            }}
             className="cursor-pointer rounded-md bg-richblack-700 py-2 px-5 font-semibold text-richblack-50"
           >
-            Cancel
+            Anulează
           </button>
-          <IconBtn type="submit" text="Save" />
+          <IconBtn type="submit" text="Salvează" />
         </div>
-
       </form>
     </>
-  )
+  );
 }

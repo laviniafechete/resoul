@@ -1,17 +1,21 @@
 export const NavbarLinks = [
   {
-    title: "Home",
+    title: "Acasa",
     path: "/",
   },
   {
     title: "Catalog",   
   },
   {
-    title: "About Us",
+    title: "Despre Noi",
     path: "/about",
   },
   {
-    title: "Contact Us",
+    title: "Contactați-ne",
     path: "/contact",
+  },
+  {
+    title: "Q&A",
+    path: "/qna",
   },
 ];

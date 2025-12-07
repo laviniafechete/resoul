@@ -1,13 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     fontFamily: {
       inter: ["Inter", "sans-serif"],
       "edu-sa": ["Edu SA Beginner", "cursive"],
       mono: ["Roboto Mono", "monospace"],
-      boogaloo: ['Boogaloo', "sans-serif"]
+      boogaloo: ['Boogaloo', "sans-serif"],
+      playfair: ["Playfair Display", "serif"],
+      lato: ["Lato", "sans-serif"],
+      moontime: ["Moontime", "cursive"],
+      sans: ["Lato", "Inter", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Ubuntu", "Cantarell", "Noto Sans", "Helvetica Neue", "Arial", "sans-serif"],
     },
     colors: {
       white: "#fff",
@@ -125,11 +129,57 @@ module.exports = {
         800: "#171717",
         900: "#141414",
       },
+      // Calm brand palette (for rebranding)
+      lavender: {
+        50: "#F8F7F4",   // light background
+        100: "#EEE8F3",
+        200: "#E4D6EF",
+        300: "#D9C8EB",
+      },
+      sand: {
+        100: "#F3EDE4",
+        200: "#E7D9C7",
+      },
+      rosegray: {
+        100: "#EDE6E9",
+      },
+      warmgray: {
+        200: "#DCD5CE",
+      },
+      brand: {
+        primary: "#B497D6",   // lavender accent
+        secondary: "#E7D9C7", // warm sand
+        accent: "#D8C18F",    // soft gold
+        text: "#2E2E2E",      // primary text
+        bg: "#F8F7F4",        // base background
+      },
+    },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+        sm: "1rem",
+        lg: "2rem",
+        xl: "2rem",
+        "2xl": "2.5rem",
+      },
     },
     extend: {
       maxWidth: {
         maxContent: "1260px",
         maxContentTab: "650px"
+      },
+      backgroundImage: {
+        // soft gradients for hero/sections
+        "brand-hero": "linear-gradient(to bottom, rgba(255,255,255,0.10), rgba(255,255,255,0.80))",
+        "lavender-soft": "linear-gradient(180deg, #EEE8F3 0%, #F3EDE4 100%)",
+      },
+      boxShadow: {
+        soft: "0 8px 30px rgba(0,0,0,0.06)",
+      },
+      borderRadius: {
+        xl: "0.875rem",
+        "2xl": "1rem",
       },
     },
   },

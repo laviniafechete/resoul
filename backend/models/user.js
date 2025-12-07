@@ -23,8 +23,21 @@ const userSchema = new mongoose.Schema(
         },
         accountType: {
             type: String,
-            enum: ['Admin', 'Instructor', 'Student'],
-            reuired: true
+            enum: ['Admin', 'Instructor', 'Student', 'Corporate'],
+            required: true
+        },
+        subscriptionPlan: {
+            type: String,
+            enum: ['Default', 'Subscriber'],
+            default: 'Default'
+        },
+        subscriptionStatus: {
+            type: String,
+            enum: ['Inactive', 'Active'],
+            default: 'Inactive'
+        },
+        subscriptionActiveUntil: {
+            type: Date,
         },
         active: {
             type: Boolean,

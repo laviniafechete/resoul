@@ -1,107 +1,75 @@
 import { toast } from "react-hot-toast";
-import { studentEndpoints } from "../apis";
+import { studentEndpoints, profileEndpoints, courseEndpoints } from "../apis";
 import { apiConnector } from "../apiConnector";
-import rzpLogo from "../../assets/Logo/rzp_logo.png"
+// Stripe does not require a logo here; kept for potential UI use
 import { setPaymentLoading } from "../../slices/courseSlice";
 import { resetCart } from "../../slices/cartSlice";
 
 
-const { COURSE_PAYMENT_API, COURSE_VERIFY_API, SEND_PAYMENT_SUCCESS_EMAIL_API } = studentEndpoints;
+const { COURSE_PAYMENT_API, COURSE_VERIFY_API } = studentEndpoints;
 
-function loadScript(src) {
-    return new Promise((resolve) => {
-        const script = document.createElement("script");
-        script.src = src;
-
-        script.onload = () => {
-            resolve(true);
-        }
-        script.onerror = () => {
-            resolve(false);
-        }
-        document.body.appendChild(script);
-    })
-}
-
-// ================ buyCourse ================ 
+// ================ buyCourse ================
 export async function buyCourse(token, coursesId, userDetails, navigate, dispatch) {
-    const toastId = toast.loading("Loading...");
-
-    try {
-        //load the script
-        const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-
-        if (!res) {
-            toast.error("RazorPay SDK failed to load");
-            return;
-        }
-
-        // initiate the order
-        const orderResponse = await apiConnector("POST", COURSE_PAYMENT_API,
-            { coursesId },
-            {
-                Authorization: `Bearer ${token}`,
-            })
-        // console.log("orderResponse... ", orderResponse);
-        if (!orderResponse.data.success) {
-            throw new Error(orderResponse.data.message);
-        }
-
-        const RAZORPAY_KEY = import.meta.env.VITE_APP_RAZORPAY_KEY;
-        // console.log("RAZORPAY_KEY...", RAZORPAY_KEY);
-
-        // options
-        const options = {
-            key: RAZORPAY_KEY,
-            currency: orderResponse.data.message.currency,
-            amount: orderResponse.data.message.amount,
-            order_id: orderResponse.data.message.id,
-            name: "StudyNotion",
-            description: "Thank You for Purchasing the Course",
-            image: rzpLogo,
-            prefill: {
-                name: userDetails.firstName,
-                email: userDetails.email
-            },
-            handler: function (response) {
-                //send successful mail
-                sendPaymentSuccessEmail(response, orderResponse.data.message.amount, token);
-                //verifyPayment
-                verifyPayment({ ...response, coursesId }, token, navigate, dispatch);
-            }
-        }
-
-        const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
-        paymentObject.on("payment.failed", function (response) {
-            toast.error("oops, payment failed");
-            console.log("payment failed.... ", response.error);
-        })
-
+  const toastId = toast.loading("Loading...");
+  try {
+    if (!Array.isArray(coursesId) || coursesId.length === 0) {
+      throw new Error("Select at least one course.");
     }
-    catch (error) {
-        console.log("PAYMENT API ERROR.....", error);
-        toast.error(error.response?.data?.message);
-        // toast.error("Could not make Payment");
+
+    // Check if already enrolled (prevent duplicate purchases)
+    const enrolledResponse = await apiConnector(
+      "GET",
+      profileEndpoints.GET_USER_ENROLLED_COURSES_API,
+      null,
+      { Authorization: `Bearer ${token}` }
+    );
+    
+    const enrolledCourseIds = enrolledResponse?.data?.data?.map(course => course._id) || [];
+    const alreadyEnrolled = coursesId.filter(courseId => enrolledCourseIds.includes(courseId));
+    
+    if (alreadyEnrolled.length > 0) {
+      toast.dismiss(toastId);
+      toast.error(`You are already enrolled in ${alreadyEnrolled.length} course(s). Please refresh the page.`);
+      return;
     }
+
+    // initiate Stripe session
+    const orderResponse = await apiConnector(
+      "POST",
+      COURSE_PAYMENT_API,
+      { coursesId },
+      { Authorization: `Bearer ${token}` }
+    );
+
+    const { success, url, message, freeEnrollment } = orderResponse?.data || {};
+
+    if (freeEnrollment) {
+      toast.success(
+        message || "Cursurile gratuite au fost adăugate în contul tău."
+      );
+      dispatch?.(resetCart());
+      navigate("/dashboard/enrolled-courses");
+      return;
+    }
+
+    if (!success || !url) {
+      throw new Error(message || "Could not create Stripe session.");
+    }
+
+    // optional UX flag
+    dispatch?.(setPaymentLoading(true));
+
+    // Redirect to Stripe Checkout
+    window.location.assign(url);
+  } catch (error) {
+    const msg =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Payment initialization failed.";
+    toast.error(msg);
+  } finally {
     toast.dismiss(toastId);
-}
-
-
-// ================ send Payment Success Email ================
-async function sendPaymentSuccessEmail(response, amount, token) {
-    try {
-        await apiConnector("POST", SEND_PAYMENT_SUCCESS_EMAIL_API, {
-            orderId: response.razorpay_order_id,
-            paymentId: response.razorpay_payment_id,
-            amount,
-        }, {
-            Authorization: `Bearer ${token}`
-        })
-    }
-    catch (error) {
-        console.log("PAYMENT SUCCESS EMAIL ERROR....", error);
-    }
+  }
 }
 
 
@@ -123,9 +91,64 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
         dispatch(resetCart());
     }
     catch (error) {
-        console.log("PAYMENT VERIFY ERROR....", error);
         toast.error("Could not verify Payment");
     }
     toast.dismiss(toastId);
     dispatch(setPaymentLoading(false));
+}
+
+// ================ verify payment by Stripe sessionId (optional client-side confirmation) ================
+export async function verifyPaymentBySessionId(sessionId, token, navigate, dispatch) {
+  if (!sessionId) return;
+  const toastId = toast.loading("Verifying payment...");
+  dispatch(setPaymentLoading(true));
+  try {
+    const response = await apiConnector(
+      "POST",
+      COURSE_VERIFY_API,
+      { sessionId },
+      { Authorization: `Bearer ${token}` }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.message || "Verification failed.");
+    }
+
+    toast.success("Payment successful! You’re enrolled.");
+    dispatch(resetCart());
+    navigate("/dashboard/enrolled-courses");
+  } catch (error) {
+    const msg = error?.response?.data?.message || error?.message || "Could not verify payment.";
+    toast.error(msg);
+  } finally {
+    toast.dismiss(toastId);
+    dispatch(setPaymentLoading(false));
+  }
+}
+
+export async function enrollInFreeCourse(courseId, token, dispatch) {
+  const toastId = toast.loading("Se procesează înscrierea...");
+  try {
+    const response = await apiConnector(
+      "POST",
+      courseEndpoints.ENROLL_FREE_COURSE_API,
+      { courseId },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.message || "Nu am putut înscrie cursul");
+    }
+
+    toast.success(response?.data?.message || "Te-am înscris la curs");
+    dispatch?.(resetCart());
+    return response?.data?.data;
+  } catch (error) {
+    toast.error(error?.message || "Nu am putut înscrie cursul");
+    throw error;
+  } finally {
+    toast.dismiss(toastId);
+  }
 }

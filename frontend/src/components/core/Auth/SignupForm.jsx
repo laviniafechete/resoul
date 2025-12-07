@@ -1,15 +1,13 @@
-import { useState } from "react"
-import { toast } from "react-hot-toast"
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import { sendOtp } from "../../../services/operations/authAPI"
-import { setSignupData } from "../../../slices/authSlice"
-import { ACCOUNT_TYPE } from "../../../utils/constants"
-import Tab from "../../common/Tab"
-
-
+import { sendOtp } from "../../../services/operations/authAPI";
+import { setSignupData } from "../../../slices/authSlice";
+import { ACCOUNT_TYPE } from "../../../utils/constants";
+import Tab from "../../common/Tab";
 
 function SignupForm() {
   const navigate = useNavigate();
@@ -46,7 +44,7 @@ function SignupForm() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error("Passwords Do Not Match")
+      toast.error("Passwords Do Not Match");
       return;
     }
     const signupData = {
@@ -67,7 +65,7 @@ function SignupForm() {
       email: "",
       password: "",
       confirmPassword: "",
-    })
+    });
     setAccountType(ACCOUNT_TYPE.STUDENT);
   };
 
@@ -95,7 +93,7 @@ function SignupForm() {
         <div className="flex gap-x-4">
           {/* First Name */}
           <label>
-            <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
+            <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-300">
               First Name <sup className="text-pink-200">*</sup>
             </p>
             <input
@@ -108,13 +106,13 @@ function SignupForm() {
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
               }}
-              className="w-full rounded-[0.5rem] bg-richblack-800 p-[12px] text-richblack-5 outline-none"
+              className="form-style"
             />
           </label>
 
           {/* Last Name */}
           <label>
-            <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
+            <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-300">
               Last Name <sup className="text-pink-200">*</sup>
             </p>
             <input
@@ -127,14 +125,14 @@ function SignupForm() {
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
               }}
-              className="w-full rounded-[0.5rem] bg-richblack-800 p-[12px] text-richblack-5 outline-none"
+              className="form-style"
             />
           </label>
         </div>
 
         {/* Email Address */}
         <label className="w-full">
-          <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
+          <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-300">
             Email Address <sup className="text-pink-200">*</sup>
           </p>
           <input
@@ -147,15 +145,14 @@ function SignupForm() {
             style={{
               boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
             }}
-            className="w-full rounded-[0.5rem] bg-richblack-800 p-[12px] text-richblack-5 outline-none"
+            className="form-style"
           />
         </label>
-
 
         <div className="flex gap-x-4">
           {/* Create Password */}
           <label className="relative">
-            <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
+            <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-300">
               Create Password <sup className="text-pink-200">*</sup>
             </p>
             <input
@@ -168,23 +165,23 @@ function SignupForm() {
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
               }}
-              className="w-full rounded-[0.5rem] bg-richblack-800 p-[12px] pr-10 text-richblack-5 outline-none"
+              className="form-style"
             />
             <span
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-3 top-[38px] z-[10] cursor-pointer"
             >
               {showPassword ? (
-                <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
-              ) : (
                 <AiOutlineEye fontSize={24} fill="#AFB2BF" />
+              ) : (
+                <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
               )}
             </span>
           </label>
 
           {/* Confirm Password  */}
           <label className="relative">
-            <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
+            <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-300">
               Confirm Password <sup className="text-pink-200">*</sup>
             </p>
             <input
@@ -197,31 +194,30 @@ function SignupForm() {
               style={{
                 boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
               }}
-              className="w-full rounded-[0.5rem] bg-richblack-800 p-[12px] pr-10 text-richblack-5 outline-none"
+              className="form-style"
             />
             <span
               onClick={() => setShowConfirmPassword((prev) => !prev)}
               className="absolute right-3 top-[38px] z-[10] cursor-pointer"
             >
               {showConfirmPassword ? (
-                <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
-              ) : (
                 <AiOutlineEye fontSize={24} fill="#AFB2BF" />
+              ) : (
+                <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
               )}
             </span>
           </label>
         </div>
 
-
         <button
           type="submit"
-          className="mt-6 rounded-[8px] bg-yellow-50 py-[8px] px-[12px] font-medium text-richblack-900"
+          className="mt-6 rounded-[8px] bg-brand-primary py-[8px] px-[12px] font-medium text-white"
         >
-          Create Account
+          Creează cont
         </button>
       </form>
     </div>
-  )
+  );
 }
 
-export default SignupForm
+export default SignupForm;
